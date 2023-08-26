@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
@@ -29,9 +30,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::group(['prefix'=>'restaurants'],function(){
+
+        Route::prefix('{restaurant}/categories')->group(function(){
+            Route::get('/',[CategoryController::class,'index'])->name('category.index')->withoutMiddleware('auth');
+            Route::get('/{category}', [CategoryController::class, 'show'])->name('category.create')->withoutMiddleware('auth');
+            Route::post('/',[CategoryController::class,'store'])->name('category.store');
+            Route::get('{category}/edit',[CategoryController::class,'edit'])->name('category.edit');
+            Route::put('{category}',[CategoryController::class,'update'])->name('category.update');
+            Route::delete('{category}',[CategoryController::class,'destroy'])->name('category.destroy');
+        });
+
+
         Route::get('/',[RestaurantController::class,'index'])->name('restaurant.index');
         Route::view('/create','restaurants.create')->name('restaurant.create');
-        Route::get('{restaurant:slug}',[RestaurantController::class,'show'])->name('restaurant.show');
+        Route::get('{restaurant}',[RestaurantController::class,'show'])->name('restaurant.show');
         Route::get('{restaurant}/edit',[RestaurantController::class,'edit'])->name('restaurant.edit');
         Route::post('/',[RestaurantController::class,'store'])->name('restaurant.store');
         Route::put('{restaurant}',[RestaurantController::class,'update'])->name('restaurant.update');

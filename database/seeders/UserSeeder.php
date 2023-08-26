@@ -13,6 +13,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $mainUser = User::factory()->hasRestaurants()->create([
+            'name' => 'Ahmet Sabri',
+            'email' => 'ahmed@mail.com'
+        ]);
+
         User::factory()->count(10)->hasRestaurants()->create();
     }
 }

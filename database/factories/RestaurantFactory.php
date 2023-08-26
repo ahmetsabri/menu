@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
+use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,5 +25,12 @@ class RestaurantFactory extends Factory
             'slug' => str()->slug($name),
             'status' => 'active'
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Restaurant $restaurant) {
+            $restaurant->categories()->createMany((Category::factory()->count(random_int(1,7))->make(['restaurant_id'=>$restaurant->id])->toArray()));
+        });
     }
 }

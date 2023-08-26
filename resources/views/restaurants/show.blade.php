@@ -1,0 +1,2 @@
+view restaurant
+{{$restaurant}}

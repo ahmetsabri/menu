@@ -11,16 +11,22 @@ class Restaurant extends Model
 
     protected $guarded = [];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
     public static function booted(){
         parent::booted();
 
         static::creating(function($restaurant){
             $restaurant->slug = str()->slug($restaurant->name);
         });
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
     }
 }

@@ -1,0 +1,2 @@
+show categories
+{{$category}}
