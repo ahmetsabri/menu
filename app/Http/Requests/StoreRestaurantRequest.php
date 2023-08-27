@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRestaurantRequest extends FormRequest
@@ -23,7 +24,11 @@ class StoreRestaurantRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'image' => ['sometimes', 'image','max:5000','mimes:jpg,jpeg,png'],
+            'image' => ['sometimes','nullable' ,'image','mimes:jpg,jpeg,png'],
         ];
+    }
+
+    public function failedValidation(Validator $validator){
+        dd($validator->errors());
     }
 }

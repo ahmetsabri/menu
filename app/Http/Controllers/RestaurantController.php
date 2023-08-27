@@ -30,7 +30,8 @@ class RestaurantController extends Controller
             $path = $request->file('image')->store('restaurants');
             $restaurant->image()->create(['path' => $path]);
         }
-        return back()->with('success', __('messages.restaurant_created'));
+
+        return to_route('restaurant.show', $restaurant)->with('success', __('messages.restaurant_created'));
     }
 
     /**
