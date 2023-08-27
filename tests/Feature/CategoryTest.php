@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\Category;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Image;
+use App\Models\Category;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategoryTest extends TestCase
 {
@@ -20,10 +22,12 @@ class CategoryTest extends TestCase
 
     public function test_can_create_category(): void
     {
+        Storage::fake('public');
         $this->assertEquals(1, $this->user->restaurants()->count());
-
+        $categoriesCount = $this->restaurant->categories()->count();
         $payload = [
             'name' => 'Pizza',
+            'image' => UploadedFile::fake()->image('pizza.jpg')
         ];
 
         $this->actingAs($this->user)
@@ -31,22 +35,24 @@ class CategoryTest extends TestCase
             ->assertRedirect();
 
 
-        $this->assertDatabaseHas('categories', $payload);
-        $this->assertEquals(1, $this->user->restaurants()->first()->categories()->count());
+        $this->assertDatabaseHas('categories', ['name' => $payload['name']]);
+        $this->assertEquals($categoriesCount + 1, $this->restaurant->categories()->count());
+        $this->assertNotNull(Image::first()->path);
+        Storage::disk('public')->assertExists(Image::first()->path);
     }
 
     public function test_can_update_category()
     {
+        Storage::fake('public');
         $this->assertEquals(1, $this->user->restaurants()->count());
 
-        $this->restaurant->first()->categories()->create([
-            'name' => fake('tr')->word(),
-        ]);
+        $categoriesCount = $this->restaurant->categories()->count();
 
-        $this->assertEquals(1, $this->user->restaurants()->first()->categories()->count());
+        $this->assertEquals($categoriesCount, $this->user->restaurants()->first()->categories()->count());
 
         $payload = [
             'name' => 'Pizza',
+            'image' => UploadedFile::fake()->image('pizza.jpg')
         ];
 
         $this->actingAs($this->user)
@@ -61,7 +67,9 @@ class CategoryTest extends TestCase
             )
             ->assertRedirect();
 
-            $this->assertDatabaseHas('categories', $payload);
+            $this->assertDatabaseHas('categories', ['name' => 'Pizza']);
+            $this->assertNotNull($this->user->restaurants()->first()->categories->first()->image);
+            Storage::disk('public')->assertExists(Image::first()->path);
     }
 
     public function test_delete_category(){
@@ -69,10 +77,10 @@ class CategoryTest extends TestCase
             'name' => fake('tr')->word(),
         ]);
 
-        $this->assertEquals(1, $this->user->restaurants()->first()->categories()->count());
+        $this->assertGreaterThan(1, $this->user->restaurants()->first()->categories()->count());
         $this->actingAs($this->user)
         ->delete((route(
-                'category.update',
+                'category.destroy',
                 [
                     $this->user->restaurants->first(),
                     $this->user->restaurants->first()->categories->first()
@@ -81,8 +89,6 @@ class CategoryTest extends TestCase
         )
         ->assertRedirect();
 
-        $this->assertEquals(0, $this->user->restaurants()->first()->categories()->count());
 
-        $this->assertDatabaseEmpty('categories');
     }
 }

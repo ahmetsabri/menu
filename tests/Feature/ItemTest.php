@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\Category;
-use App\Models\Restaurant;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Image;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ItemTest extends TestCase
 {
@@ -23,6 +23,7 @@ class ItemTest extends TestCase
 
     public function test_can_create_new_item(): void
     {
+        Storage::fake('public');
         $this->assertEquals(0, $this->category->items()->count());
         $this->assertEquals(0, $this->restaurant->items()->count());
         $response = $this->actingAs($this->user)
@@ -30,6 +31,7 @@ class ItemTest extends TestCase
                 'title' => 'New Item',
                 'description' => 'New Item Description',
                 'price' => 1000,
+                'image' => UploadedFile::fake()->image('Pide.jpg'),
             ]);
 
         $response->assertRedirect();
@@ -41,13 +43,18 @@ class ItemTest extends TestCase
             'description' => 'New Item Description',
             'price' => 1000,
         ]);
+
+        $this->assertNotNull(Image::first()->path);
+        Storage::assertExists(Image::first()->path);
     }
 
     public function test_can_update_item(){
+
+        Storage::fake('public');
         $this->category->items()->create([
             'title' => 'New Item',
             'description' => 'New Item Description',
-            'price' => 1000,
+            'price' => 1000
         ]);
 
         $this->assertEquals(1, $this->category->items()->count());
@@ -57,11 +64,16 @@ class ItemTest extends TestCase
                 'title' => 'Updated Item',
                 'description' => 'Updated Item Description',
                 'price' => 2000,
+                'image' => UploadedFile::fake()->image('Pide.jpg'),
+
             ]);
 
         $response->assertRedirect();
 
         $response->assertSessionHasNoErrors();
+        $this->assertNotNull(Image::first()->path);
+        Storage::assertExists(Image::first()->path);
+
     }
 
     public function test_can_delete_item(){

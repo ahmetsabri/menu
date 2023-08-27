@@ -2,12 +2,16 @@
 
 namespace Tests\Feature;
 
+use App\Models\Image;
 use App\Models\Restaurant;
 use App\Models\User;
 use Database\Seeders\UserSeeder;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class RestaurantTest extends TestCase
@@ -22,10 +26,12 @@ class RestaurantTest extends TestCase
 
     public function test_create_restaurant(): void
     {
+        Storage::fake('public');
         $this->assertCount(0, $this->user->restaurants);
+
         $response = $this->actingAs($this->user)->post('/restaurants', [
             'name' => 'My Restaurant',
-            'status' => 'active'
+            'image' => UploadedFile::fake()->image('restaurant.jpg'),
         ]);
 
         $response->assertRedirect();
@@ -36,18 +42,22 @@ class RestaurantTest extends TestCase
         ]);
         $response->assertSessionDoesntHaveErrors();
         $response->assertSessionHas('success');
+
+        Storage::disk('public')->assertExists(Image::first()->path);
     }
 
     public function test_can_update_resturant()
     {
+        Storage::fake('public');
         $this->actingAs($this->user);
 
         $restaurant =  $this->user->restaurants()->create(
             Restaurant::factory()->make()->toArray()
         );
 
-        $response = $this->put('/restaurants/' . $restaurant->id, [
+        $response = $this->post('/restaurants/' . $restaurant->id, [
             'name' => 'new Restaurant',
+            'image' => UploadedFile::fake()->image('restaurant.jpg'),
         ]);
 
         $response->assertRedirect();
@@ -55,6 +65,8 @@ class RestaurantTest extends TestCase
         $this->assertDatabaseHas('restaurants', [
             'name' => 'new Restaurant',
         ]);
+
+        Storage::disk('public')->assertExists(Image::first()->path);
     }
 
     public function test_delete_restaurant()

@@ -23,7 +23,7 @@ class UpdateRestaurantRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'image' => ['nullable', 'sometimes','image', 'max:1024'],
+            'image' => ['nullable', 'sometimes','image', 'max:1024', 'mimes:jpg,png,jpeg'],
         ];
     }
 }

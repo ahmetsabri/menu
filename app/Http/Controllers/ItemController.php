@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateItemRequest;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Restaurant;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
@@ -33,7 +34,12 @@ class ItemController extends Controller
     public function store(StoreItemRequest $request, Restaurant $restaurant, Category $category)
     {
         $this->authorize('create', [Item::class, $restaurant,$category]);
-        $category->items()->create($request->validated());
+        $item = $category->items()->create($request->safe()->except('image'));
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('items');
+            $item->image()->create(['path' => $path]);
+        }
 
         return back()->with('success', __('messages.sucess_operation'));
     }
@@ -62,7 +68,16 @@ class ItemController extends Controller
     public function update(UpdateItemRequest $request,Restaurant $restaurant, Category $category, Item $item)
     {
         $this->authorize('update', [Item::class, $restaurant,$category,$item]);
-        $item->update($request->validated());
+
+        $item->update($request->safe()->except('image'));
+
+        if ($request->hasFile('image')) {
+
+            $item->image ? Storage::delete($item?->image?->path ?? '') : '';
+            $path = $request->file('image')->store('items');
+
+            $item->image ? $item->image()->update(['path' => $path]) : $item->image()->create(['path' => $path]);
+        }
 
         return back()->with('success', __('messages.sucess_operation'));
     }

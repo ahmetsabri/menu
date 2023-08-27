@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\Restaurant;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -33,7 +34,12 @@ class CategoryController extends Controller
     {
         $this->authorize('create', [Category::class, $restaurant]);
 
-        $restaurant->categories()->create($request->validated());
+        $category = $restaurant->categories()->create($request->safe()->except('image'));
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('categories');
+            $category->image()->create(['path' => $path]);
+        }
 
         return back()->with('success', __('messages.succes_operation'));
     }
@@ -46,6 +52,7 @@ class CategoryController extends Controller
         abort_if($category->restaurant_id !== $restaurant->id, 404);
 
         //TODO: Load items with category
+        $category = $category->load('items');
         return view('categories.show', compact('restaurant', 'category'));
     }
 
@@ -67,7 +74,15 @@ class CategoryController extends Controller
     {
         abort_if($category->restaurant_id !== $restaurant->id, 404);
 
-        $category->update($request->validated());
+        $category->update($request->safe()->except('image'));
+
+        if ($request->hasFile('image')) {
+
+            $category->image ? Storage::delete($category?->image?->path ?? '') : '';
+            $path = $request->file('image')->store('categories');
+
+            $category->image ? $category->image()->update(['path' => $path]) : $category->image()->create(['path' => $path]);
+        }
 
         return back()->with('success', __('messages.succes_operation'));
     }
