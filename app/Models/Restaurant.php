@@ -11,10 +11,11 @@ class Restaurant extends Model
 
     protected $guarded = [];
 
-    public static function booted(){
+    public static function booted()
+    {
         parent::booted();
 
-        static::creating(function($restaurant){
+        static::creating(function ($restaurant) {
             $restaurant->slug = str()->slug($restaurant->name);
         });
     }
@@ -28,5 +29,10 @@ class Restaurant extends Model
     public function categories()
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function items()
+    {
+        return $this->hasManyThrough(Item::class, Category::class);
     }
 }
