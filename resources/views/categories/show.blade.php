@@ -60,11 +60,19 @@
             </ol>
         </nav>
     </div>
+             <div class="w-full mx-24 my-4">
+
+              <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+  {{__('messages.create_item')}}
+</button>
+
+
+            </div>
     <div class="flex flex-wrap justify-center">
         @foreach($category->items as $item)
 
         <div
-        class="w-1/5 bg-white border border-gray-200 flex flex-col  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
+            class="w-1/5 bg-white border border-gray-200 flex flex-col  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
             @if($item->image?->url)
             <img class="rounded-t-lg" src="{{$item?->image?->url}}" alt="restaurant image" />
 
@@ -74,17 +82,35 @@
         <div class="p-5">
             <a href="#">
                 <h5 class="h-auto text-base font-bold tracking-tight text-gray-900 dark:text-white">{{$item->title}}</h5>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-700">{{$item->description}}</p>
                 <hr class="h-0.5 my-4 bg-gray-200 border-0 dark:bg-gray-700">
-                <h5 class="h-10 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{$item->price}} ₺ </h5>
+                <h5 class="h-10 text-2xl font-bold tracking-tight text-indigo-700 dark:text-white">{{$item->price}} ₺ </h5>
             </a>
+            @if($restaurant->created_by == auth()->id())
                 <a href="#"
                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-indigo-700 rounded-lg hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
                 {{__('messages.edit')}}
-
                 </a>
+
+                <button type="button" @click="deleteItem(`{{route('item.destroy',[$restaurant,$category,$item])}}`)" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" x-data="{
+             deleteItem(url) {
+            let sure = window.confirm('{{__('messages.are_you_sure')}}')
+            if(!sure) return
+
+            axios.delete(url)
+                .then(() => {
+                    window.location.reload()
+                });
+            }
+            }">
+                {{__('messages.delete')}}
+                </button>
+                                @endif
 
         </div>
     </div>
         @endforeach
     </div>
+    <x-create-item />
+
 </x-app-layout>

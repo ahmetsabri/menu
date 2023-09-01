@@ -52,7 +52,8 @@ class CategoryController extends Controller
         abort_if($category->restaurant_id !== $restaurant->id, 404);
 
         //TODO: Load items with category
-        $category = $category->load('items');
+        $category = $category->load('items.image');
+
         return view('categories.show', compact('restaurant', 'category'));
     }
 

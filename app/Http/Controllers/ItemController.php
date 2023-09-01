@@ -17,6 +17,7 @@ class ItemController extends Controller
     public function index(Restaurant $restaurant, Category $category)
     {
         $items = $category->items;
+
         return view('items.index', compact('restaurant', 'category'));
     }
 
@@ -88,8 +89,10 @@ class ItemController extends Controller
     public function destroy(Restaurant $restaurant, Category $category, Item $item)
     {
         $this->authorize('delete', [Item::class, $restaurant, $category, $item]);
+        $item->image ? Storage::delete($item?->image?->path ?? '') : '';
+        $item->image?->delete();
         $item->delete();
 
-        return back()->with('success', __('messages.sucess_operation'));
+        return request()->expectsJson() ? response()->json(status:204) : back()->with('success', __('messages.sucess_operation'));
     }
 }

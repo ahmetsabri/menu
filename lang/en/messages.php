@@ -28,5 +28,7 @@ return [
     'category_name' => 'Category Name',
     'optional' => 'optional',
     'image' => 'Image',
+    'create_item' => 'Create Item',
+    'are_you_sure' => 'Are you sure?',
 
 ];
