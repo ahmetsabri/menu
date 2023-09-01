@@ -95,8 +95,12 @@ class CategoryController extends Controller
     {
         $this->authorize('delete', $category);
 
+        $category->image ? Storage::delete($category?->image?->path ?? '') : '';
+        $category->image?->delete();
+        $category->items()->delete();
+
         $category->delete();
 
-        return back()->with('success', __('messages.succes_operation'));
+        return request()->expectsJson() ? response()->json(status:204) : back()->with('success', __('messages.sucess_operation'));
     }
 }

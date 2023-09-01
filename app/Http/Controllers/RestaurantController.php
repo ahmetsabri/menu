@@ -39,7 +39,7 @@ class RestaurantController extends Controller
      */
     public function show(Restaurant $restaurant)
     {
-        $restaurant = $restaurant->load('categories')->loadCount('categories');
+        $restaurant = $restaurant->load('categories.image');
 
         return view('restaurants.show', compact('restaurant'));
     }
