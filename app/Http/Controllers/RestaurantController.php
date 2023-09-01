@@ -31,7 +31,7 @@ class RestaurantController extends Controller
             $restaurant->image()->create(['path' => $path]);
         }
 
-        return to_route('restaurant.show', $restaurant)->with('success', __('messages.restaurant_created'));
+        return back()->with('success', __('messages.success_operation'));
     }
 
     /**
@@ -83,9 +83,21 @@ class RestaurantController extends Controller
     public function destroy(Restaurant $restaurant)
     {
         $this->authorize('delete', $restaurant);
+        $restaurant->image ? Storage::delete($restaurant?->image?->path ?? '') : '';
 
+        $restaurant = $restaurant->load('categories.image')->load('items.image');
+
+        foreach ($restaurant->items as $item) {
+            $item->delete();
+        }
+
+        foreach ($restaurant->categories as $category) {
+            $category->delete();
+        }
+
+        $restaurant->image()->delete();
         $restaurant->delete();
 
-        return back()->with('success', __('messages.restaurant_deleted'));
+        return request()->expectsJson() ? response()->json(status:204) : back()->with('success', __('messages.sucess_operation'));
     }
 }

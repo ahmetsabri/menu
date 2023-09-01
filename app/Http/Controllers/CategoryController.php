@@ -95,9 +95,11 @@ class CategoryController extends Controller
     {
         $this->authorize('delete', $category);
 
-        $category->image ? Storage::delete($category?->image?->path ?? '') : '';
-        $category->image?->delete();
-        $category->items()->delete();
+        $category = $category->load('items.image');
+
+        $category->items->each(function ($item) {
+            $item->delete();
+        });
 
         $category->delete();
 
