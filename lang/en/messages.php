@@ -1,17 +1,6 @@
 <?php
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-    */
     'show_restaurant' => 'Show Restaurant',
     'restaurants' => 'Restaurants',
     'categories' => 'Categories',
@@ -30,5 +19,9 @@ return [
     'image' => 'Image',
     'create_item' => 'Create Item',
     'are_you_sure' => 'Are you sure?',
-
+    'save' => 'save',
+    'item_name' => 'name',
+    'item_description' => 'description',
+    'item_price' => 'price',
+    'download' => 'download'
 ];

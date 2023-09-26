@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/{category}', [CategoryController::class, 'show'])->name('category.show')->withoutMiddleware('auth');
             Route::post('/', [CategoryController::class, 'store'])->name('category.store');
             Route::get('{category}/edit', [CategoryController::class, 'edit'])->name('category.edit');
-            Route::put('{category}', [CategoryController::class, 'update'])->name('category.update');
+            Route::post('{category}', [CategoryController::class, 'update'])->name('category.update');
             Route::delete('{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
             Route::prefix('{category}/items')->group(function () {
@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/create', [ItemController::class, 'create'])->name('item.create');
                 Route::post('/', [ItemController::class, 'store'])->name('item.store');
                 Route::get('{item}/edit', [ItemController::class, 'edit'])->name('item.edit');
-                Route::put('{item}', [ItemController::class, 'update'])->name('item.update');
+                Route::post('{item}', [ItemController::class, 'update'])->name('item.update');
                 Route::delete('{item}', [ItemController::class, 'destroy'])->name('item.destroy');
             });
         });

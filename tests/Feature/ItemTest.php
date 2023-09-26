@@ -60,7 +60,7 @@ class ItemTest extends TestCase
         $this->assertEquals(1, $this->category->items()->count());
 
         $response = $this->actingAs($this->user)
-            ->put(route('item.update', [$this->restaurant, $this->category, $this->category->items()->first()]), [
+            ->post(route('item.update', [$this->restaurant, $this->category, $this->category->items()->first()]), [
                 'title' => 'Updated Item',
                 'description' => 'Updated Item Description',
                 'price' => 2000,

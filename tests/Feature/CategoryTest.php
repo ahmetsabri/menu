@@ -56,7 +56,7 @@ class CategoryTest extends TestCase
         ];
 
         $this->actingAs($this->user)
-            ->put((route(
+            ->post((route(
                     'category.update',
                     [
                         $this->user->restaurants->first(),
