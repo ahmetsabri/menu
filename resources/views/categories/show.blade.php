@@ -43,6 +43,12 @@
             </ol>
         </nav>
     </div>
+        <div class="w-full flex justify-center">
+        <h1 class="text-5xl font-bold text-indigo-700">
+            {{$category->name}}
+        </h1>
+
+    </div>
     <div class="w-full mx-24 my-4">
 
         <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
@@ -51,12 +57,7 @@
             {{__('messages.create_item')}}
         </button>
     </div>
-    <div class="w-full flex justify-center">
-        <h1 class="text-5xl font-bold text-indigo-700">
-            {{$category->name}}
-        </h1>
 
-    </div>
     <div class="flex flex-wrap justify-center">
 
         @foreach($category->items as $item)
