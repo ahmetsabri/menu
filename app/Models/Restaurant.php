@@ -12,6 +12,8 @@ class Restaurant extends Model
 
     protected $guarded = [];
 
+    public $with = ['image'];
+
     public static function booted()
     {
         parent::booted();

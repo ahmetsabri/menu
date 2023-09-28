@@ -1,9 +1,10 @@
-<x-app-layout>
+<x-app-layout class="overflow-x-hidden bg-green-400">
 
     <div class="flex justify-center p-10">
         <nav class="flex" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                <li class="inline-flex items-center">
+            @auth
+     <li class="inline-flex items-center">
                     <a href="{{route('dashboard')}}"
                         class="inline-flex items-center text-xl font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
                         <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +15,7 @@
                         {{__('messages.restaurants')}}
                     </a>
                 </li>
-
+            @endauth
 
                 <li>
                     <div class="flex items-center">
@@ -25,7 +26,7 @@
                         </svg>
                         <a href="#"
                             class="ml-1 text-xl font-medium text-blue-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">
-{{$restaurant->name}}                        </a>
+        {{$restaurant->name}}                        </a>
                     </div>
                 </li>
             </ol>
@@ -34,31 +35,31 @@
 
     <div class="w-full mx-24 my-4">
 
+@auth
         <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
             class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button">
             {{__('messages.create_category')}}
         </button>
-
+@endauth
 
     </div>
     <div class="flex flex-wrap justify-center">
         @foreach($restaurant->categories as $category)
         <div
-            class="w-1/5 bg-white border border-gray-200 flex flex-col  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
+            class="w-3/4 md:w-1/4  bg-white border border-gray-200 flex flex-col  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
             @if($category->image?->url)
-            <img class="rounded-t-lg" src="{{$category?->image?->url}}" alt="restaurant image" />
-
+            <img class="rounded-t-lg h-48" src="{{$category?->image?->url}}" alt="restaurant image" />
             @else
-            <img class="rounded-t-lg" src="{{asset('imgs/placeholder.png')}}" alt="" />
+            <img class="rounded-t-lg h-48" src="{{asset('imgs/placeholder.png')}}" alt="" />
             @endif
             <x-edit-category name="{{$category->name}}" id="{{$category->id}}"/>
             <div class="p-5">
                 <a href="{{route('category.show',[$restaurant,$category])}}">
-                    <h5 class="h-16 text-base font-bold tracking-tight text-gray-900 dark:text-white">
+                    <h5 class="h-16 text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
                         {{$category->name}}</h5>
                 </a>
-                <div class="flex justify-center space-x-2">
+                <div class="flex justify-center md:space-x-2 space-x-1">
                     <a href="{{route('category.show',[$restaurant,$category])}}"
                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         {{__('messages.show')}}

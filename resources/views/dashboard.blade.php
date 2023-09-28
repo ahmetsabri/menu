@@ -15,7 +15,7 @@
 
             </div>
         @foreach($user->restaurants as $restaurant)
-            <div class="w-1/5 bg-white border border-gray-200 flex flex-col  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
+            <div class="w-3/4 md:w-1/5 bg-white border border-gray-200 flex flex-col  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
                     @if($restaurant?->image?->url)
                     <img class="rounded-t-lg" src="{{$restaurant?->image?->url}}" alt="restaurant image" />
 

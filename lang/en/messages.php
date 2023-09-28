@@ -23,5 +23,7 @@ return [
     'item_name' => 'name',
     'item_description' => 'description',
     'item_price' => 'price',
-    'download' => 'download'
+    'download' => 'download',
+    'Dashboard' => 'menu'
+
 ];
