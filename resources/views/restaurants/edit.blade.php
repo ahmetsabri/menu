@@ -1,0 +1,2 @@
+edit restaurant
+ {{$restaurant}}
