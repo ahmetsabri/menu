@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRestaurantRequest;
-use App\Http\Requests\UpdateRestaurantRequest;
 use App\Models\Restaurant;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreRestaurantRequest;
+use App\Http\Requests\UpdateRestaurantRequest;
 
 class RestaurantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $restaurants = auth()->user()->load('restaurants')->loadCount('restaurants');
@@ -19,9 +16,6 @@ class RestaurantController extends Controller
         return view('restaurants.index', compact('restaurants'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreRestaurantRequest $request)
     {
         $restaurant = auth()->user()->restaurants()->create($request->safe()->except('image'));
@@ -34,9 +28,6 @@ class RestaurantController extends Controller
         return back()->with('success', __('messages.success_operation'));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Restaurant $restaurant)
     {
         $restaurant = $restaurant->load('categories.image');
@@ -44,9 +35,6 @@ class RestaurantController extends Controller
         return view('restaurants.show', compact('restaurant'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Restaurant $restaurant)
     {
         $this->authorize('update', $restaurant);
@@ -56,9 +44,6 @@ class RestaurantController extends Controller
         return view('restaurants.edit', compact('restaurant'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateRestaurantRequest $request, Restaurant $restaurant)
     {
         $this->authorize('update', $restaurant);
@@ -71,15 +56,13 @@ class RestaurantController extends Controller
             $restaurant->image ? Storage::delete($restaurant?->image?->path ?? '') : '';
             $path = $request->file('image')->store('restaurants');
 
-            $restaurant->image ? $restaurant->image()->update(['path' => $path]) : $restaurant->image()->create(['path' => $path]);
+            $restaurant->image ? $restaurant->image()->update(['path' => $path])
+                : $restaurant->image()->create(['path' => $path]);
         }
 
         return back()->with('success', __('messages.restaurant_updated'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Restaurant $restaurant)
     {
         $this->authorize('delete', $restaurant);
@@ -98,6 +81,7 @@ class RestaurantController extends Controller
         $restaurant->image()->delete();
         $restaurant->delete();
 
-        return request()->expectsJson() ? response()->json(status:204) : back()->with('success', __('messages.sucess_operation'));
+        return request()->expectsJson() ? response()->json(status: 204)
+            : back()->with('success', __('messages.sucess_operation'));
     }
 }

@@ -24,11 +24,7 @@ class StoreRestaurantRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'image' => ['sometimes','nullable' ,'image','mimes:jpg,jpeg,png'],
+            'image' => ['sometimes','nullable' ,'image','mimes:jpg,jpeg,png,webp','max:3000'],
         ];
-    }
-
-    public function failedValidation(Validator $validator){
-        dd($validator->errors());
     }
 }

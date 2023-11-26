@@ -24,7 +24,7 @@ class StoreItemRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'price' => ['required', 'numeric', 'gt:0'],
-            'image' => ['sometimes', 'image', 'max:1050', 'mimes:jpg,jpeg,png'],
+            'image' => ['sometimes', 'image', 'max:1050', 'mimes:jpg,jpeg,png,webp'],
             'description' => ['sometimes', 'nullable','string', 'max:255'],
         ];
     }

@@ -26,7 +26,8 @@
                         </svg>
                         <a href="#"
                             class="ml-1 text-xl font-medium text-blue-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">
-        {{$restaurant->name}}                        </a>
+        {{$restaurant->name}}
+          </a>
                     </div>
                 </li>
             </ol>
@@ -47,11 +48,11 @@
     <div class="flex flex-wrap justify-center">
         @foreach($restaurant->categories as $category)
         <div
-            class="w-3/4 md:w-1/4  bg-white border border-gray-200 flex flex-col  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
+            class="w-3/4 md:w-1/5 bg-white border border-gray-200 flex flex-col rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
             @if($category->image?->url)
-            <img class="rounded-t-lg h-48" src="{{$category?->image?->url}}" alt="restaurant image" />
+           <img class="rounded-t-lg h-48" src="{{$category?->image?->url}}" alt="restaurant image" />
             @else
-            <img class="rounded-t-lg h-48" src="{{asset('imgs/placeholder.png')}}" alt="" />
+           <img class="rounded-t-lg h-48" src="{{asset('imgs/placeholder.png')}}" alt="" />
             @endif
             <x-edit-category name="{{$category->name}}" id="{{$category->id}}"/>
             <div class="p-5">
