@@ -24,6 +24,8 @@ return [
     'item_description' => 'description',
     'item_price' => 'price',
     'download' => 'download',
-    'Dashboard' => 'menu'
+    'Dashboard' => config('app.name', 'Lokanta Menü'),
+    'email' => 'Email',
+    'password' => 'Paddassword'
 
 ];

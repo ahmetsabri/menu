@@ -11,8 +11,8 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                <div class="hidden space-x-8 sm:mt-2 sm:ml-3 sm:flex text-indigo-500">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-indigo-600">
                         {{ __('messages.Dashboard') }}
                     </x-nav-link>
                 </div>

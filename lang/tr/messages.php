@@ -24,5 +24,7 @@ return [
     'item_description' => 'Açıklama',
     'item_price' => 'Fiyat',
     'download' => 'İndir',
-    'Dashboard' => 'menü'
+    'Dashboard' => config('app.name', 'Lokanta Menü'),
+    'email' => 'E-posta',
+    'password' => 'parola'
 ];
