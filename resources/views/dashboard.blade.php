@@ -16,12 +16,7 @@
             </div>
         @foreach($user->restaurants as $restaurant)
             <div class="w-3/4 md:w-1/5 bg-white border border-gray-200 flex flex-col  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
-                    @if($restaurant?->image?->url)
-                    <img class="rounded-t-lg" src="{{$restaurant?->image?->url}}" alt="restaurant image" />
-
-                    @else
-                    <img class="rounded-t-lg" src="{{asset('imgs/placeholder.png')}}" alt="" />
-                    @endif
+                    <img class="rounded-t-lg" src="{{$restaurant?->image?->url ?? asset('imgs/placeholder.png')}}" alt="{{$restaurant->name}}" />
                 <div class="p-5">
                     <a href="{{route('restaurant.show',[$restaurant])}}">
                         <h5 class="h-16 text-base font-bold tracking-tight text-gray-900 dark:text-white">{{$restaurant->name}}</h5>

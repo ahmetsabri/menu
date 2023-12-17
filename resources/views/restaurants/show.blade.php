@@ -49,11 +49,8 @@
         @foreach($restaurant->categories as $category)
         <div
             class="w-3/4 md:w-1/5 bg-white border border-gray-200 flex flex-col rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-3 my-3">
-            @if($category->image?->url)
-           <img class="rounded-t-lg h-48" src="{{$category?->image?->url}}" alt="restaurant image" />
-            @else
-           <img class="rounded-t-lg h-48" src="{{asset('imgs/placeholder.png')}}" alt="" />
-            @endif
+           <img class="rounded-t-lg h-48" src="{{($category?->image?->url ?? $restaurant?->image?->url ?? asset('imgs/placeholder.png'))}}" alt="{{$category->name}}" />
+
             <x-edit-category name="{{$category->name}}" id="{{$category->id}}"/>
             <div class="p-5">
                 <a href="{{route('category.show',[$restaurant,$category])}}">
